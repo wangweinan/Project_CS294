@@ -57,7 +57,7 @@ for line in sys.stdin:
         text = ' '.join(list)
         temp = text.lower()
         text_new  = temp.split()
-        happy_prob, sad_prob = classifySentiment(tweet1, happy_log_probs, sad_log_probs)
+        happy_prob, sad_prob = classifySentiment(text_new, happy_log_probs, sad_log_probs)
         score = math.log(happy_prob/sad_prob)
         print(score)
         list = []
