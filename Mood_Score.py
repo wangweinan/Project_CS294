@@ -8,6 +8,7 @@ import numpy as np
 list = []
 inStatus = False
 inText = False
+inTime = False
 
 def readSentimentList(file_name):
     ifile = open(file_name, 'r')
@@ -39,15 +40,26 @@ def classifySentiment(words, happy_log_probs, sad_log_probs):
 
 happy_log_probs, sad_log_probs = readSentimentList('twitter_sentiment_list.csv')
 
+time = []
+
 for line in sys.stdin:
     line = line.strip()
     if inText:
         list.append(line)
+    if inTime:
+        time.append(line)
     if line.find( "<status>" ) != -1:
         inStatus = True
         continue
     if line.find( "</status>" ) != -1:
         inStatus = False
+        continue
+    if inStatus and line.find("<created_at>") != -1:
+        inTime = True
+        continue
+    if inStatus and line.find("</created_at>") != -1:
+        inTime = False
+        time = time[12:21]
         continue
     if inStatus and line.find( "<text>" ) != -1:
         inText = True
@@ -59,8 +71,9 @@ for line in sys.stdin:
         text_new  = temp.split()
         happy_prob, sad_prob = classifySentiment(text_new, happy_log_probs, sad_log_probs)
         score = (happy_prob,sad_prob)
-        print(score)
+        print(score,time)
         list = []
+        time = []
         continue
     
 
