@@ -70,7 +70,7 @@ for line in sys.stdin:
         temp = text.lower()
         text_new  = temp.split()
         happy_prob, sad_prob = classifySentiment(text_new, happy_log_probs, sad_log_probs)
-        score = (happy_prob,sad_prob)
+        score = math.log(happy_prob/sad_prob)
         print(score,time)
         list = []
         time = []
