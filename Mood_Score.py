@@ -56,19 +56,31 @@ for line in sys.stdin:
         continue
     if inStatus and line.find("<created_at>") != -1:
         inTime = True
-        continue
-    if inStatus and line.find("</created_at>") != -1:
-        inTime = False
-        time = time[12:21]
+	time = line
+	time = time[12:21]
+	inTime = False
         continue
     if inStatus and line.find( "<text>" ) != -1:
         inText = True
-        continue
+	if line.find("</text>"):
+		temp = line.lower()
+		temp = temp.decode("utf-8")
+		text_new  = temp.split()
+	        happy_prob, sad_prob = classifySentiment(text_new, happy_log_probs, sad_log_probs)
+        	score = math.log(happy_prob/sad_prob)
+        	print(score,time)
+		inText = False
+        	list = []
+        	time = []
+		continue
+	else:
+        	continue
     if inStatus and line.find( "</text>" ) != -1:
         inText = False
         text = ' '.join(list)
         temp = text.lower()
-        text_new  = temp.split()
+	temp = temp.decode("utf-8")
+	text_new  = temp.split()
         happy_prob, sad_prob = classifySentiment(text_new, happy_log_probs, sad_log_probs)
         score = math.log(happy_prob/sad_prob)
         print(score,time)
