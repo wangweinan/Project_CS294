@@ -57,7 +57,7 @@ for line in sys.stdin:
     if inStatus and line.find("<created_at>") != -1:
         inTime = True
 	time = line
-	time = time[12:21]
+	time = time[12:22]
 	inTime = False
         continue
     if inStatus and line.find( "<text>" ) != -1:
@@ -68,7 +68,7 @@ for line in sys.stdin:
 		text_new  = temp.split()
 	        happy_prob, sad_prob = classifySentiment(text_new, happy_log_probs, sad_log_probs)
         	score = math.log(happy_prob/sad_prob)
-        	print(score,time)
+        	print('%f\t%s') % (score, str(time))
 		inText = False
         	list = []
         	time = []
@@ -83,7 +83,7 @@ for line in sys.stdin:
 	text_new  = temp.split()
         happy_prob, sad_prob = classifySentiment(text_new, happy_log_probs, sad_log_probs)
         score = math.log(happy_prob/sad_prob)
-        print(score,time)
+        print('%f\t%s') % (score, str(time))
         list = []
         time = []
         continue
